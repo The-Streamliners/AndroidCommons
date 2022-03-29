@@ -20,7 +20,7 @@ abstract class Task<I, O> {
 /**
  * TasksInParallelHelper is a helper class that performs task in parallel.
  * Any input type (I) & output type (O) is supported.
- * By Implementing task class, you can perform ny task on I to generate O.
+ * By Implementing task class, you can perform any task on I to generate O.
  * Whether it be a long IO operation or a network call.
  */
 class TasksInParallelHelper<I, O> {
