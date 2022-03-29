@@ -21,7 +21,7 @@ Step 2: Add AndroidCommons dependency to your **app build.gradle**:
 
 ```groovy
     dependencies {
-            implementation 'com.github.The-Streamliners:AndroidCommons:0.1.0'
+            implementation 'com.github.The-Streamliners:AndroidCommons:1.0'
     }
 ```
 
