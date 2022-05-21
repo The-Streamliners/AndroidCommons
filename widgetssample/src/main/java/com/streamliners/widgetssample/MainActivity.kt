@@ -1,7 +1,6 @@
 package com.streamliners.widgetssample
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.streamliners.widgetssample.multiselect.MultiSelectWidget
 import com.streamliners.widgetssample.ui.theme.CommonsTheme
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -40,10 +40,10 @@ class MainActivity : ComponentActivity() {
             mutableStateOf(
                 MultiSelectWidget.MultiSelectWidgetState(
                     items = items,
-                    selectedItems = listOf("Apple"),
+                    selectedItems = emptyList(),
                     type = MultiSelectWidget.MultiSelectType.DisabledItemsSupport.create(
                         items = items,
-                        disabledItems = listOf("Cat")
+                        disabledItems = emptyList()
                     )
                 )
             )
@@ -62,6 +62,16 @@ class MainActivity : ComponentActivity() {
             }
         )
         val scope = rememberCoroutineScope()
+        val expandBottomSheet = {
+            scope.launch {
+                bottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+            }
+        }
+        val hideBottomSheet = {
+            scope.launch {
+                bottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+            }
+        }
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -70,17 +80,19 @@ class MainActivity : ComponentActivity() {
         ) {
             Button(
                 modifier = Modifier.wrapContentSize(),
-                onClick = {
-                    scope.launch {
-                        bottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
-                    }
-                }
+                onClick = { expandBottomSheet() }
             ) {
                 Text(text = "Open bottom sheet")
             }
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Text(
+                text = "Selected items: ${state.value.selectedItems}",
+                style = MaterialTheme.typography.subtitle1
+            )
         }
 
-        MultiSelectWidgetBottomSheetSample(bottomSheetState, state, temporaryState)
+        MultiSelectWidgetBottomSheetSample(bottomSheetState, state, temporaryState, hideBottomSheet)
     }
 }
 
@@ -89,7 +101,8 @@ class MainActivity : ComponentActivity() {
 private fun MultiSelectWidgetBottomSheetSample(
     bottomSheetState: ModalBottomSheetState,
     state: MutableState<MultiSelectWidget.MultiSelectWidgetState>,
-    temporaryState: MutableState<MultiSelectWidget.MultiSelectWidgetState>
+    temporaryState: MutableState<MultiSelectWidget.MultiSelectWidgetState>,
+    hideBottomSheet: () -> Job
 ) {
 
     ModalBottomSheetLayout(
@@ -104,6 +117,7 @@ private fun MultiSelectWidgetBottomSheetSample(
                 },
                 onSubmit = {
                     state.value = temporaryState.value
+                    hideBottomSheet()
                 }
             )
         },
@@ -126,29 +140,30 @@ fun MultiSelectWidgetInBottomSheet(
             onStateChanged(newState)
         },
         onSubmit = onSubmit,
-        onFirstItemSelected = {
+        onFirstItemSelected = { midState ->
+            val firstSelectedItem = midState.selectedItems.first()
             // If Ball is selected, disable ["Apple", "Cat"]
-            if (it == "Ball") {
-                val newState = state.copy(
+            if (firstSelectedItem == "Ball") {
+                val newState = midState.copy(
                     type = MultiSelectWidget.MultiSelectType.DisabledItemsSupport.create(
                         state.items,
                         listOf("Apple", "Cat")
                     )
                 )
                 onStateChanged(newState)
-                Log.v("MyLogg", "onFirstItemSelected ////// TempStateChanged: $newState")
+            } else {
+                onStateChanged(midState)
             }
         },
-        onNoItemsSelected = {
+        onNoItemsSelected = { midState ->
             // Clear disabledItems
-            val newState = state.copy(
+            val newState = midState.copy(
                 type = MultiSelectWidget.MultiSelectType.DisabledItemsSupport.create(
                     state.items,
                     emptyList()
                 )
             )
             onStateChanged(newState)
-            Log.v("MyLogg", "onNoItemsSelected ////// TempStateChanged: $newState")
         }
     )
 }

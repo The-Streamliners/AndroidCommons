@@ -1,6 +1,7 @@
 package com.streamliners.widgetssample.multiselect
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
@@ -58,8 +59,8 @@ object MultiSelectWidget {
         state: MultiSelectWidgetState,
         onStateChanged: (MultiSelectWidgetState) -> Unit,
         onSubmit: () -> Unit,
-        onFirstItemSelected: (String) -> Unit = {},
-        onNoItemsSelected: () -> Unit = {}
+        onFirstItemSelected: (MultiSelectWidgetState) -> Unit = { onStateChanged(it) },
+        onNoItemsSelected: (MultiSelectWidgetState) -> Unit = { onStateChanged(it) }
     ) {
         Column(
             modifier = modifier
@@ -80,20 +81,12 @@ object MultiSelectWidget {
                                     else
                                         state.removeItem(item)
 
-                                onStateChanged(newState)
-
                                 if(newState.selectedItems.isEmpty())
-                                    onNoItemsSelected()
+                                    onNoItemsSelected(newState)
                                 else if (newState.selectedItems.size == 1)
-                                    onFirstItemSelected(newState.selectedItems.first())
-
-                                Log.v("MyLogg", """
-                                    ///// StateDebugging 
-                                    $/ item = $item
-                                    $/ checked = $checked
-                                    $/ prevState = $state
-                                    $/ newState = $newState
-                                """.trimIndent())
+                                    onFirstItemSelected(newState)
+                                else
+                                    onStateChanged(newState)
                             }
                         )
                     }
@@ -137,13 +130,16 @@ object MultiSelectWidget {
         onCheckChanged: (Boolean) -> Unit
     ) {
         Row(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { if (enabled) onCheckChanged(!checked) }
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = checked,
                 enabled = enabled,
-                onCheckedChange = onCheckChanged
+                onCheckedChange = { }
             )
             Spacer(
                 Modifier.size(8.dp)

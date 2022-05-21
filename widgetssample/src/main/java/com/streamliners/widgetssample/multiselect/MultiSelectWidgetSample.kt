@@ -97,7 +97,7 @@ fun MultiSelectWidgetDisabledItemsSupportSample(
         },
         onFirstItemSelected = {
             // If Ball is selected, disable ["Apple", "Cat"]
-            if (it == "Ball") {
+            if (it.selectedItems.first() == "Ball") {
                 state.value = state.value.copy(
                     type = MultiSelectWidget.MultiSelectType.DisabledItemsSupport.create(
                         state.value.items,
