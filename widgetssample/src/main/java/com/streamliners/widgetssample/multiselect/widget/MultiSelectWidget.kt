@@ -1,6 +1,5 @@
-package com.streamliners.widgetssample.multiselect
+package com.streamliners.widgetssample.multiselect.widget
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -14,17 +13,17 @@ import androidx.compose.ui.unit.dp
 
 object MultiSelectWidget {
 
-    data class MultiSelectWidgetState(
+    data class State(
         val items: List<String>,
         val selectedItems: List<String>,
         val type: MultiSelectType = MultiSelectType.Normal
     ) {
 
-        fun addItem(item: String): MultiSelectWidgetState = copy(
+        fun addItem(item: String): State = copy(
             selectedItems = selectedItems + item
         )
 
-        fun removeItem(item: String): MultiSelectWidgetState = copy(
+        fun removeItem(item: String): State = copy(
             selectedItems = selectedItems - item
         )
     }
@@ -56,11 +55,11 @@ object MultiSelectWidget {
     @Composable
     fun MultiSelectWidget(
         modifier: Modifier = Modifier,
-        state: MultiSelectWidgetState,
-        onStateChanged: (MultiSelectWidgetState) -> Unit,
+        state: State,
+        onStateChanged: (State) -> Unit,
         onSubmit: () -> Unit,
-        onFirstItemSelected: (MultiSelectWidgetState) -> Unit = { onStateChanged(it) },
-        onNoItemsSelected: (MultiSelectWidgetState) -> Unit = { onStateChanged(it) }
+        onFirstItemSelected: (State) -> Unit = { onStateChanged(it) },
+        onNoItemsSelected: (State) -> Unit = { onStateChanged(it) }
     ) {
         Column(
             modifier = modifier
