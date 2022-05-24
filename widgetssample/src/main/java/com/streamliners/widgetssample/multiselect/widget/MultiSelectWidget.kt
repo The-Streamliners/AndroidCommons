@@ -156,7 +156,6 @@ object MultiSelectWidget {
                     style = TextStyle(textDecoration = TextDecoration.LineThrough)
                 )
             }
-
         }
     }
 }
