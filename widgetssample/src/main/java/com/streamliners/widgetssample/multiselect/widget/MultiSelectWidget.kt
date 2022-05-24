@@ -13,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 
 object MultiSelectWidget {
@@ -154,14 +156,24 @@ object MultiSelectWidget {
             Checkbox(
                 checked = isChecked.value,
                 enabled = enabled,
-                onCheckedChange = { isChecked.value = it }
+                onCheckedChange = { onCheckChanged(it) }
+
             )
             Spacer(
                 Modifier.size(8.dp)
             )
-            Text(
-                label
-            )
+
+            if (enabled) {
+                Text(
+                    label
+                )
+            } else {
+                Text(
+                    text = label,
+                    style = TextStyle(textDecoration = TextDecoration.LineThrough)
+                )
+            }
+
         }
     }
 }
