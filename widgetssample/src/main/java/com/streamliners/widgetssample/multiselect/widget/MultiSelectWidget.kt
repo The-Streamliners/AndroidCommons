@@ -1,11 +1,15 @@
 package com.streamliners.widgetssample.multiselect.widget
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -130,17 +134,30 @@ object MultiSelectWidget {
         checked: Boolean = false,
         onCheckChanged: (Boolean) -> Unit
     ) {
+        val isChecked = remember {
+            mutableStateOf(checked)
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { if (enabled) onCheckChanged(!checked) }
+                .clickable {
+                    if (enabled && isChecked.value) {
+                        isChecked.value = false
+                        return@clickable
+                    }
+                    if (enabled && !isChecked.value) {
+                        isChecked.value = true
+                        return@clickable
+                    }
+                }
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checked,
+                checked = isChecked.value,
                 enabled = enabled,
                 onCheckedChange = { onCheckChanged(it) }
+
             )
             Spacer(
                 Modifier.size(8.dp)
