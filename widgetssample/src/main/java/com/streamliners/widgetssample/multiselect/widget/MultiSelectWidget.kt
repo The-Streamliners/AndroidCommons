@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 
 object MultiSelectWidget {
@@ -75,12 +77,12 @@ object MultiSelectWidget {
                             enabled = state.type.itemsToEnabledOrNotMap.getOrDefault(item, true),
                             onCheckChanged = { checked ->
                                 val newState =
-                                    if(checked)
+                                    if (checked)
                                         state.addItem(item)
                                     else
                                         state.removeItem(item)
 
-                                if(newState.selectedItems.isEmpty())
+                                if (newState.selectedItems.isEmpty())
                                     onNoItemsSelected(newState)
                                 else if (newState.selectedItems.size == 1)
                                     onFirstItemSelected(newState)
@@ -98,7 +100,7 @@ object MultiSelectWidget {
                             checked = state.selectedItems.contains(item),
                             onCheckChanged = { checked ->
                                 val newState =
-                                    if(checked)
+                                    if (checked)
                                         state.addItem(item)
                                     else
                                         state.removeItem(item)
@@ -138,14 +140,23 @@ object MultiSelectWidget {
             Checkbox(
                 checked = checked,
                 enabled = enabled,
-                onCheckedChange = { }
+                onCheckedChange = { onCheckChanged(it) }
             )
             Spacer(
                 Modifier.size(8.dp)
             )
-            Text(
-                label
-            )
+
+            if (enabled) {
+                Text(
+                    label
+                )
+            } else {
+                Text(
+                    text = label,
+                    style = TextStyle(textDecoration = TextDecoration.LineThrough)
+                )
+            }
+
         }
     }
 }
