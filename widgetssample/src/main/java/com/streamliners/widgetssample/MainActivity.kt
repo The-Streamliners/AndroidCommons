@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun Content() {
         // MultiSelectSample()
-         MultiSelectBottomSheetSample()
+        MultiSelectBottomSheetSample()
         //MultiSelectWidgetNormalSample()
         //MultiSelectWidgetDisabledItemsSupportSample()
     }
