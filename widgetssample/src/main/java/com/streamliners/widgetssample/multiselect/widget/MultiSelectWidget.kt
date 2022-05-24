@@ -137,6 +137,7 @@ object MultiSelectWidget {
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Checkbox(
                 checked = checked,
                 enabled = enabled,
