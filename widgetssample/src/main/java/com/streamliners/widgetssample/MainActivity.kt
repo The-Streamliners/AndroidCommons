@@ -10,6 +10,8 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.streamliners.widgetssample.multiselect.bottomsheet.MultiSelectBottomSheetSample
+import com.streamliners.widgetssample.multiselect.widget.MultiSelectWidgetDisabledItemsSupportSample
+import com.streamliners.widgetssample.multiselect.widget.MultiSelectWidgetNormalSample
 import com.streamliners.widgetssample.other.SampleCard
 import com.streamliners.widgetssample.ui.theme.CommonsTheme
 
@@ -35,5 +37,7 @@ class MainActivity : ComponentActivity() {
     private fun Content() {
         // MultiSelectSample()
         MultiSelectBottomSheetSample()
+        //MultiSelectWidgetNormalSample()
+        //MultiSelectWidgetDisabledItemsSupportSample()
     }
 }
